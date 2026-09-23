@@ -1,8 +1,8 @@
 # 기본 사이트 정보
-title: "음 - La bohème"
+title: "La bohème"
 subtitle: "by @haanss"
-name: "한스의 음악 저장소."
-description: "한스의 음악 저장소."
+name: "한스의 책방."
+description: "한스의 책방."
 # 기본 사이트 정보
 
 # 구글 애널리틱스 연동 설정
@@ -29,7 +29,7 @@ author:
       url: "https://instagram.com/haanss"
 
 # URL 및 퍼머링크 설정
-url: "https://umm.la-bohe.me"
+url: "https://la-bohe.me"
 baseurl: ""
 
 # 포스트 주소 형식 지정

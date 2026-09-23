@@ -1,6 +1,6 @@
 # 상단 메인 네비게이션 설정
 main:
-  - title: "Cover View"
+  - title: "Book Cover"
     url: /gallery/
   - title: "Posts"
     url: /posts/
@@ -12,22 +12,24 @@ main:
     url: /about/
 
 docs:
-  - title: "cover gallery"
+  - title: "Book Cover"
     url: /gallery/
-  - title: Music
-    url: /categories/music/
+  - title: Book
+    url: /categories/book/
     children:
-      - title: "K-pop"
-        url: /categories/music-k-pop/
-      - title: "POP"
-        url: /categories/music-pop/
-      - title: "OST"
-        url: /categories/music-ost/
-      - title: "Jazz"
-        url: /categories/music-jazz/
-      - title: "Classic"
-        url: /categories/music-classic/
+      - title: "고전"
+        url: /categories/고전/
+      - title: "소설"
+        url: /categories/소설/
+      - title: "에세이"
+        url: /categories/에세이/
+      - title: "인문"
+        url: /categories/인문/
+      - title: "글쓰기"
+        url: /categories/글쓰기/
+      - title: "작가"
+        url: /categories/작가/
         
   - title: News
-    url: /categories/news/
+    url: /categories/News/
     

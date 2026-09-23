@@ -2,40 +2,45 @@ import os
 import re
 
 def process_all_features():
-    # 1. 스크립트 파일이 위치한 폴더를 기준으로 경로를 확실하게 고정합니다.
+    # 1. 스크립트 파일이 위치한 폴더를 기준으로 경로 설정
     base_dir = os.path.dirname(os.path.abspath(__file__))
     source_dir = base_dir
     target_dir = os.path.join(base_dir, '_change')
     
-    # 2. _change 폴더가 없으면 새로 만듭니다.
+    # 2. _change 폴더 생성
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
         
-    # 3. 소스 폴더에 있는 모든 .md 파일 목록을 가져옵니다.
+    # 3. 소스 폴더에 있는 모든 .md 파일 목록 가져오기
     md_files = [f for f in os.listdir(source_dir) if f.endswith('.md')]
     
     count = 0
     for filename in md_files:
         filepath = os.path.join(source_dir, filename)
         
-        # 파일을 읽기 모드로 엽니다.
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
             
-        # 4. 정규표현식을 사용해 --- 기준으로 설정 영역과 본문을 명확하게 3등분 합니다.
+        # 4. 정규표현식을 사용해 Front Matter(설정 영역)와 본문을 3등분
         parts = re.split(r'^-{3,}\s*$', content, maxsplit=2, flags=re.MULTILINE)
         
-        # 정상적인 포스트 형식이 아니면 건너뜁니다.
         if len(parts) < 3:
             continue
             
         front_matter = parts[1]
         body = parts[2]
         
-        # 5. 본문 인사말 변경
+        # 5. 본문 치환 규칙: 인사말 변경
         body = body.replace("라보엠", "**한스**")
         
-        # 설정 영역 분석을 위한 준비
+        # 🌟 본문 치환 규칙: 문단 시작 번호를 마크다운 헤더(##)로 변환 🌟
+        # ^\s* : 줄의 시작과 선택적 공백
+        # (\d+) : 1개 이상의 숫자(그룹 지정)
+        # \.\s : 마침표와 공백 1칸
+        # flags=re.MULTILINE : 모든 줄의 시작점을 개별적으로 검사
+        body = re.sub(r'^\s*(\d+)\.\s', r'## \1. ', body, flags=re.MULTILINE)
+        
+        # 설정 영역 분석
         lines = front_matter.strip().split('\n')
         new_lines = []
         
@@ -46,15 +51,15 @@ def process_all_features():
         for line in lines:
             clean_line = line.rstrip()
             
-            # 규칙: excerpt 주석 처리
+            # 규칙 1: excerpt 주석 처리
             if clean_line.startswith('excerpt:'):
                 clean_line = '# ' + clean_line
                 
-            # 태그 존재 여부 확인
+            # 규칙 2: 기존 태그 존재 여부 확인
             if clean_line.startswith('tags:'):
                 has_tags = True
                 
-            # 규칙: 타이틀에서 가수 이름 추출
+            # 규칙 3: 타이틀에서 괄호 안의 작가/가수 이름 추출 및 띄어쓰기 변환
             if clean_line.startswith('title:'):
                 raw_title = clean_line.replace('title:', '').strip().strip('\'"')
                 match = re.search(r'\[(.*?)\]\s*(.*)', raw_title)
@@ -67,38 +72,44 @@ def process_all_features():
                             artist_name = rest_title.split()[0]
                     else:
                         artist_name = bracket_word
+                    
+                    # 띄어쓰기를 언더바(_)로 변환
+                    if artist_name:
+                        artist_name = artist_name.replace(' ', '_')
                         
-            # 규칙: 카테고리 대분류 추가
+            # 규칙 4: 카테고리 대분류 추가 및 완벽한 중복 방지
             if clean_line.startswith('categories:'):
                 categories_idx = len(new_lines)
                 cat_value = clean_line.replace('categories:', '').strip()
                 
                 if cat_value:
-                    main_cat_raw = cat_value.split('.')[0]
-                    main_cat_title = main_cat_raw.capitalize()
+                    words = cat_value.split()
                     
-                    # 중복 추가 방지
-                    if not cat_value.startswith(main_cat_title + ' '):
-                        clean_line = f"categories: {main_cat_title} {cat_value}"
+                    if len(words) == 1:
+                        main_cat_raw = cat_value.split('.')[0]
+                        main_cat_title = main_cat_raw.capitalize()
+                        
+                        if cat_value.lower() != main_cat_title.lower():
+                            clean_line = f"categories: {main_cat_title} {cat_value}"
                         
             new_lines.append(clean_line)
             
-        # 규칙: 태그가 없었고 가수 이름이 추출되었다면 카테고리 바로 아래에 삽입
+        # 규칙 5: 태그가 없었고 이름이 추출되었다면 카테고리 아래에 태그 삽입
         if not has_tags and artist_name and categories_idx != -1:
             new_lines.insert(categories_idx + 1, f"tags: {artist_name}")
             
-        # 6. 수정한 내용을 다시 하나로 결합합니다.
+        # 6. 수정 내용 병합
         new_front_matter = '\n'.join(new_lines)
         new_content = f"---\n{new_front_matter}\n---{body}"
         
-        # 7. _change 폴더에 최종 파일을 저장합니다.
+        # 7. 변경된 파일 저장
         target_filepath = os.path.join(target_dir, filename)
         with open(target_filepath, 'w', encoding='utf-8') as f:
             f.write(new_content)
             
         count += 1
         
-    print(f"작업 완료! 총 {count}개의 포스팅 파일이 모든 규칙에 맞게 수정되어 '_change' 폴더에 저장되었습니다.")
+    print(f"작업 완료! 총 {count}개의 포스팅 파일이 성공적으로 수정되어 '_change' 폴더에 저장되었습니다.")
 
 if __name__ == "__main__":
     process_all_features()

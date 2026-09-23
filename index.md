@@ -1,5 +1,6 @@
 ---
-title: "[아이유] 이별로부터 내 영혼의 단짝까지"
+masthead_title: "La bohème by @haanss"
+# title: "La bohème by @haanss"
 layout: splash
 author_profile: false
 ---
@@ -36,18 +37,25 @@ author_profile: false
     margin-bottom: 2rem;
     background-color: #000000;
     overflow: hidden; 
+    /* 🌟 1. 전체 카루셀 영역 높이를 680px로 강제 고정합니다 */
+    height: 680px;
   }
 
   .carousel-track {
     display: flex;
     width: 300%; 
+    /* 🌟 2. 부모의 680px 높이를 상속받아 꽉 채웁니다 */
+    height: 100%;
     transition: transform 0.6s ease-in-out; 
   }
 
   .carousel-slide {
     width: 33.3333%;
     position: relative;
-    padding: 5rem 0;
+    padding: 2.5rem 0;
+    display: flex;
+    align-items: center; /* 🌟 3. 고정된 680px 높이 내에서 내부 요소를 수직 중앙에 배치합니다 */
+    /* padding: 2.5rem 0; 삭제됨 (높이가 고정되었으므로 패딩으로 조절하지 않음) */
   }
 
   .carousel-slide::before {
@@ -58,7 +66,7 @@ author_profile: false
     background-size: cover;
     background-position: center;
     opacity: 1; 
-    filter: blur(55px);
+    filter: blur(40px);
     transform: scale(1.15);
     z-index: 1;
   }
@@ -66,18 +74,38 @@ author_profile: false
   .custom-hero-inner {
     position: relative;
     z-index: 2;
+    width: 100%; /* flex 자식으로서 너비 보장 */
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 1em;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 8%;
   }
 
-  .custom-hero-text { flex: 1.3; text-align: left; }
+  /* 🌟 텍스트 상단 여백 설정 🌟 */
+  .custom-hero-text { 
+    flex: 1.3; 
+    text-align: left; 
+    align-self: flex-start; /* 텍스트 상자를 위로 끌어올립니다 */
+    margin-top: 60px; /* 원하는 상단 여백 수치로 조절하세요 */
+  }
+
+  /* 🌟 카테고리 텍스트 디자인 (붉은색) 🌟 */
+  .custom-hero-category {
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #dd3030; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.8); 
+  }
+
   .custom-hero-text h1 {
-    font-size: 2.1rem; margin-bottom: 1rem; color: #ffffff;
+    font-size: 2rem; margin-bottom: 1rem; color: #ffffff;
     line-height: 1.3; font-weight: 800; letter-spacing: -0.5px;
     text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.9);
   }
@@ -90,44 +118,31 @@ author_profile: false
     display: inline-block; padding: 12px 25px; background-color: transparent;
     color: #ffffff !important; border: 2px solid #ffffff; border-radius: 5px;
     text-decoration: none; font-weight: bold; transition: all 0.3s ease;
-    text-shadow: 0px 1px 3px rgba(0,0,0,0.8); box-shadow: 0px 2px 5px rgba(0,0,0,0.4);
+    text-shadow: 0px 1px 3px rgba(0,0,0,0.8); box-shadow: 0px 2px 5px rgba(0,0,0,0.5);
   }
   .custom-hero-btn:hover {
     background-color: #ffffff; color: #222222 !important; text-shadow: none;
   }
 
-  /* 🌟 CD 이미지 위치 변경: 왼쪽으로 30px 당김 🌟 */
   .custom-hero-visual {
     flex: 0.7; display: flex; justify-content: flex-end;
-    align-items: center; perspective: 1200px;
+    align-items: flex-start;
     transform: translateX(-30px); 
   }
 
-  @keyframes floatCD {
-    0% { transform: rotateY(-18deg) rotateX(5deg) scale(1.05) translateY(0px); }
-    50% { transform: rotateY(-22deg) rotateX(1deg) scale(1.05) translateY(-15px); }
-    100% { transform: rotateY(-18deg) rotateX(5deg) scale(1.05) translateY(0px); }
-  }
-
   .cd-case-img {
-    width: 100%; max-width: 380px; aspect-ratio: 1 / 1; object-fit: cover;
-    border-radius: 2px 4px 4px 2px;
-    animation: floatCD 6s ease-in-out infinite; transition: box-shadow 0.6s ease;
-    box-shadow: 
-      inset 1px 0px 4px rgba(255, 255, 255, 0.6),
-      1px 0px 0px rgba(255, 255, 255, 0.9),
-      2px 0px 0px rgba(245, 245, 245, 0.8),
-      3px 0px 0px rgba(230, 230, 230, 0.7),
-      4px 0px 0px rgba(210, 210, 210, 0.5),
-      5px 0px 0px rgba(180, 180, 180, 0.3),
-      25px 35px 50px rgba(0, 0, 0, 0.5);
+    width: 100%; 
+    max-width: 380px; 
+    aspect-ratio: 7 / 10; 
+    object-fit: cover;
+    border-radius: 5px; 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); 
   }
 
-  /* 화살표 기본 디자인 (폭 좁게, 폰트 두껍게) */
   .carousel-arrow {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%) scaleX(0.4);
+    transform: translateY(-50%) scaleX(0.5);
     background: transparent;
     color: #ffffff;
     border: none;
@@ -141,12 +156,10 @@ author_profile: false
   }
   .carousel-arrow:hover { opacity: 1; }
 
-  /* 🌟 화살표 위치 배치: 데스크탑에서 좌우 여백의 정중앙에 위치 🌟 */
   @media (min-width: 1280px) {
     .carousel-arrow.left { left: calc((100vw - 1280px) / 10); }
     .carousel-arrow.right { right: calc((100vw - 1280px) / 10); }
   }
-  /* 작은 모니터나 태블릿 환경에서는 가장자리에 여백을 약간 주고 붙임 */
   @media (max-width: 1279px) {
     .carousel-arrow.left { left: 1vw; }
     .carousel-arrow.right { right: 1vw; }
@@ -157,24 +170,29 @@ author_profile: false
     display: flex; gap: 8px; z-index: 10;
   }
   .dot {
-    width: 10px; height: 10px; background-color: rgba(255, 255, 255, 0.4);
+    width: 10px; height: 10px; background-color: rgba(255, 255, 255, 0.5);
     border-radius: 50%; cursor: pointer; transition: 0.3s;
   }
   .dot.active { background-color: #ffffff; transform: scale(1.2); }
 
-  /* 🌟 모바일 환경 대응: 이미지 중앙 정렬 완벽 복원 🌟 */
   @media (max-width: 768px) {
-    .custom-hero-inner { flex-direction: column; padding: 0 2em; }
-    .custom-hero-text { order: 2; text-align: center; }
+    .custom-hero-inner { 
+      flex-direction: column; padding: 0 2em; 
+      align-items: center; 
+    }
+    .custom-hero-text { 
+      order: 2; text-align: center; 
+      margin-top: 0; /* 🌟 모바일에서는 상단 여백을 초기화하여 디자인 붕괴 방지 */
+    }
     .custom-hero-visual { 
       order: 1; justify-content: center; margin-bottom: 3rem; 
-      transform: translateX(0); /* 왼쪽 이동값 해제하여 화면 중앙에 완벽 배치 */
+      transform: translateX(0);
     }
   }
 </style>
 
 
-<!-- 3. HTML 카루셀 구조 -->
+<!-- 3. HTML 카루셀 구조 🌟(카테고리 2단 출력 로직 적용)🌟 -->
 <div class="custom-hero-carousel">
   <div class="carousel-track" id="track">
     
@@ -182,6 +200,13 @@ author_profile: false
     <div class="carousel-slide" style="--bg-img: url('{{ img1 | relative_url }}')">
       <div class="custom-hero-inner">
         <div class="custom-hero-text">
+          <!-- 🌟 카테고리가 2개 이상일 경우 [0]/[1] 형태로 출력 -->
+          {% if post1.categories.size > 1 %}
+            <span class="custom-hero-category">{{ post1.categories[0] }}/{{ post1.categories[1] }}</span>
+          {% elsif post1.categories.size > 0 %}
+            <span class="custom-hero-category">{{ post1.categories[0] }}</span>
+          {% endif %}
+          
           <h1>{{ post1.title }}</h1>
           <p>{{ post1.excerpt | strip_html | truncate: 100 }}</p>
           <a href="{{ post1.url | relative_url }}" class="custom-hero-btn">Read more</a>
@@ -196,6 +221,12 @@ author_profile: false
     <div class="carousel-slide" style="--bg-img: url('{{ img2 | relative_url }}')">
       <div class="custom-hero-inner">
         <div class="custom-hero-text">
+          {% if post2.categories.size > 1 %}
+            <span class="custom-hero-category">{{ post2.categories[0] }}/{{ post2.categories[1] }}</span>
+          {% elsif post2.categories.size > 0 %}
+            <span class="custom-hero-category">{{ post2.categories[0] }}</span>
+          {% endif %}
+          
           <h1>{{ post2.title }}</h1>
           <p>{{ post2.excerpt | strip_html | truncate: 100 }}</p>
           <a href="{{ post2.url | relative_url }}" class="custom-hero-btn">Read more</a>
@@ -210,6 +241,12 @@ author_profile: false
     <div class="carousel-slide" style="--bg-img: url('{{ img3 | relative_url }}')">
       <div class="custom-hero-inner">
         <div class="custom-hero-text">
+          {% if post3.categories.size > 1 %}
+            <span class="custom-hero-category">{{ post3.categories[0] }}/{{ post3.categories[1] }}</span>
+          {% elsif post3.categories.size > 0 %}
+            <span class="custom-hero-category">{{ post3.categories[0] }}</span>
+          {% endif %}
+          
           <h1>{{ post3.title }}</h1>
           <p>{{ post3.excerpt | strip_html | truncate: 100 }}</p>
           <a href="{{ post3.url | relative_url }}" class="custom-hero-btn">Read more</a>
@@ -298,7 +335,6 @@ author_profile: false
     font-size: 1.2rem; 
     color: #333; 
     margin-bottom: 15px; 
-    /* 🌟 가사에만 명조체(Serif) 계열 폰트를 최우선으로 적용합니다 🌟 */
     font-family: 'Noto Serif KR', 'Nanum Myeongjo', 'Batang', '바탕', serif;
   }
   
@@ -308,7 +344,7 @@ author_profile: false
   }
 
   /* 피처 로우 영역 CSS */
-  .feature-row { display: flex; flex-direction: column; align-items: flex-start; gap: 40px; padding: 30px 0; border-bottom: 1px solid #f2f3f3; }
+  .feature-row { display: flex; flex-direction: column; align-items: flex-start; gap: 50px; padding: 30px 0; border-bottom: 1px solid #f2f3f3; }
   .feature-row:last-of-type { border-bottom: none; }
   
   @media (min-width: 768px) {
@@ -318,17 +354,17 @@ author_profile: false
   }
   
   .feature-img { flex: 1; width: 100%; }
-  .feature-img img { width: 100%; height: auto; border-radius: 4px; display: block; }
+  .feature-img img { width: 100%; height: auto; border-radius: 5px; display: block; }
   
   .feature-text { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; padding: 0; }
   .feature-text h2 { margin-top: 0; font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; }
-  .feature-text p { color: #494e52; line-height: 1.6; margin-bottom: 25px; }
+  .feature-text p { color: #495e52; line-height: 1.6; margin-bottom: 25px; }
   
   /* 무한 스크롤 갤러리 영역 CSS */
   .custom-gallery-grid { display: grid; gap: 24px; margin-top: 2em; grid-template-columns: repeat(1, 1fr); }
   @media (min-width: 768px) { .custom-gallery-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .custom-gallery-grid { grid-template-columns: repeat(4, 1fr); } }
-  .custom-gallery-item { position: relative; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  @media (min-width: 1024px) { .custom-gallery-grid { grid-template-columns: repeat(5, 1fr); } }
+  .custom-gallery-item { position: relative; overflow: hidden; border-radius: 8px; box-shadow: 0 5px 6px rgba(0,0,0,0.1); }
   .custom-gallery-item img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; transition: transform 0.3s ease; }
   .gallery-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0, 0, 0, 0.7); color: #ffffff; padding: 15px; text-align: center; font-weight: bold; font-size: 1rem; transform: translateY(100%); transition: transform 0.3s ease; pointer-events: none; }
   .custom-gallery-item:hover img { transform: scale(1.05); }
@@ -362,7 +398,7 @@ author_profile: false
     {% endfor %}
   </div>
 
-  <h2 style="text-align: center; margin-top: 40px; margin-bottom: 20px;">More Music Collection</h2> 
+  <h2 style="text-align: center; margin-top: 50px; margin-bottom: 20px;">More Books Collection</h2> 
   
   <div class="custom-gallery-grid" id="gallery-grid">
     {% for post in site.posts offset:3 %}
@@ -377,7 +413,7 @@ author_profile: false
     {% endfor %}
   </div>
 
-  <div id="scroll-sentinel" style="height: 20px; margin-top: 40px; margin-bottom: 40px;"></div>
+  <div id="scroll-sentinel" style="height: 20px; margin-top: 50px; margin-bottom: 50px;"></div>
 
 </div>
 

@@ -22,7 +22,6 @@ def clean_and_convert_html(body_tag, post_id):
     # 2. 유튜브 데이터(figure, iframe) 추출 후 마커로 치환
     for fig in body_tag.find_all('figure', attrs={'data-video-host': 'youtube'}):
         url = fig.get('data-video-url', '')
-        # 유튜브 고유 ID 11자리 추출 정규식
         match = re.search(r'(?:v=|/)([0-9A-Za-z_-]{11})', url)
         if match:
             fig.replace_with(f"\n\n__YOUTUBE_MARKER__{match.group(1)}__YOUTUBE_END__\n\n")
@@ -47,6 +46,21 @@ def clean_and_convert_html(body_tag, post_id):
             img.replace_with(f"\n\n__IMG_MARKER__{new_src}||{alt}__IMG_END__\n\n")
         else:
             img.decompose()
+            
+    # 4. 외부 링크 추출 후 마커로 치환 (오픈그래프용)
+    for a_tag in body_tag.find_all('a'):
+        href = a_tag.get('href', '')
+        
+        # 안전장치: 링크 안에 이미지가 포함된 경우(티스토리 사진 라이트박스 등)는 변환 제외
+        if '__IMG_MARKER__' in str(a_tag):
+            a_tag.unwrap()
+            continue
+            
+        # 외부 웹사이트 주소인 경우 오픈그래프 마커로 치환
+        if href.startswith('http'):
+            a_tag.replace_with(f"\n\n__LINK_MARKER__{href}__LINK_END__\n\n")
+        else:
+            a_tag.unwrap()
             
     # 5. 본문 내 숨겨진 스크립트나 스타일 태그 완전히 제거
     for hidden in body_tag.find_all(['script', 'style', 'head', 'meta', 'link']):
@@ -73,24 +87,30 @@ def clean_and_convert_html(body_tag, post_id):
     for line in lines:
         line = line.strip()
         if not line:
-            processed_lines.append("") # 문단 구분을 위한 빈 줄 유지
+            processed_lines.append("") 
             continue
         
-        # H2 마커를 # 타이틀로 복원
+        # H2 마커 복원
         if '__H2_MARKER__' in line:
             line = re.sub(r'__H2_MARKER__(.*?)__H2_END__', r'# \1', line)
             processed_lines.append(line)
             continue
         
-        # 유튜브 마커를 지킬 include 코드로 복원
+        # 유튜브 마커 복원
         if '__YOUTUBE_MARKER__' in line:
             line = re.sub(r'__YOUTUBE_MARKER__(.*?)__YOUTUBE_END__', r'{% include video id="\1" provider="youtube" %}', line)
             processed_lines.append(line)
             continue
         
-        # 이미지 마커를 img HTML로 복원
+        # 이미지 마커 복원
         if '__IMG_MARKER__' in line:
             line = re.sub(r'__IMG_MARKER__(.*?)\|\|(.*?)__IMG_END__', r'<img src="\1" alt="\2">', line)
+            processed_lines.append(line)
+            continue
+            
+        # 🌟 링크 마커를 오픈그래프 리퀴드 카드로 복원 🌟
+        if '__LINK_MARKER__' in line:
+            line = re.sub(r'__LINK_MARKER__(.*?)__LINK_END__', r'{% include auto-link.html url="\1" %}', line)
             processed_lines.append(line)
             continue
 
