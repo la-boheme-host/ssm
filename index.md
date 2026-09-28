@@ -37,8 +37,8 @@ author_profile: false
     margin-bottom: 2rem;
     background-color: #000000;
     overflow: hidden; 
-    /* 🌟 1. 전체 카루셀 영역 높이를 680px로 강제 고정합니다 */
-    height: 680px;
+    /* 🌟 1. 전체 카루셀 영역 높이를 680px로 강제 고정합니다 
+    height: 680px; */ 
   }
 
   .carousel-track {
@@ -152,7 +152,7 @@ author_profile: false
     z-index: 10;
     padding: 1rem;
     opacity: 0.2; 
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
   }
   .carousel-arrow:hover { opacity: 1; }
 
