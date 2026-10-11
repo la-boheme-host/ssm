@@ -1,5 +1,5 @@
 # 기본 사이트 정보
-title: "La bohème"
+title: "씀 - La bohème"
 subtitle: "by @haanss"
 name: "한스의 책방."
 description: "한스의 책방."
@@ -29,7 +29,7 @@ author:
       url: "https://instagram.com/haanss"
 
 # URL 및 퍼머링크 설정
-url: "https://la-bohe.me"
+url: "https://ssm.la-bohe.me"
 baseurl: ""
 
 # 포스트 주소 형식 지정
